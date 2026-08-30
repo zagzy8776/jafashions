@@ -30,58 +30,29 @@ export default function AddToBag({ product }: { product: Product }) {
     <div className="mt-8 space-y-5">
       {product.sizes?.length ? (
         <div>
-          <p className="text-xs uppercase tracking-[0.2em] text-paper/50">Size</p>
+          <p className="text-[11px] uppercase tracking-[0.16em] text-[#6f6a63]">Size</p>
           <div className="mt-2 flex flex-wrap gap-2">
             {product.sizes.map((s) => (
-              <button
-                key={s}
-                onClick={() => setSize(s)}
-                className={`rounded-full border px-3 py-1.5 text-sm ${
-                  size === s ? "border-gold text-gold" : "border-white/15"
-                }`}
-              >
-                {s}
-              </button>
+              <button key={s} onClick={() => setSize(s)} className={`border px-3 py-1.5 text-sm ${size === s ? "border-[#161513] bg-[#161513] text-[#faf7f2]" : "border-[#161513]"}`}>{s}</button>
             ))}
           </div>
         </div>
       ) : null}
       {product.colors?.length ? (
         <div>
-          <p className="text-xs uppercase tracking-[0.2em] text-paper/50">Color</p>
+          <p className="text-[11px] uppercase tracking-[0.16em] text-[#6f6a63]">Color</p>
           <div className="mt-2 flex flex-wrap gap-2">
             {product.colors.map((c) => (
-              <button
-                key={c}
-                onClick={() => setColor(c)}
-                className={`rounded-full border px-3 py-1.5 text-sm ${
-                  color === c ? "border-gold text-gold" : "border-white/15"
-                }`}
-              >
-                {c}
-              </button>
+              <button key={c} onClick={() => setColor(c)} className={`border px-3 py-1.5 text-sm ${color === c ? "border-[#161513] bg-[#161513] text-[#faf7f2]" : "border-[#161513]"}`}>{c}</button>
             ))}
           </div>
         </div>
       ) : null}
       <div className="flex flex-wrap gap-3 pt-2">
-        <button
-          disabled={!product.inStock}
-          onClick={onAdd}
-          className="rounded-full bg-paper px-6 py-3 text-sm font-medium text-ink disabled:opacity-40"
-        >
+        <button disabled={!product.inStock} onClick={onAdd} className="btn-dark disabled:opacity-40">
           {product.inStock ? (added ? "Added" : "Add to bag") : "Sold out"}
         </button>
-        <button
-          onClick={() => {
-            if (product.inStock) onAdd();
-            router.push("/checkout");
-          }}
-          disabled={!product.inStock}
-          className="rounded-full border border-white/20 px-6 py-3 text-sm"
-        >
-          Buy now
-        </button>
+        <button onClick={() => { if (product.inStock) onAdd(); router.push("/checkout"); }} disabled={!product.inStock} className="btn-line disabled:opacity-40">Buy now</button>
       </div>
     </div>
   );
