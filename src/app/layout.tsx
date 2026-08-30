@@ -1,27 +1,29 @@
 import type { Metadata } from "next";
-import { Outfit, Playfair_Display } from "next/font/google";
+import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import WhatsAppDock from "@/components/WhatsAppDock";
 import { CartProvider } from "@/components/CartProvider";
 
-const outfit = Outfit({
-  variable: "--font-outfit",
+const dm = DM_Sans({
+  variable: "--font-dm",
   subsets: ["latin"],
 });
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+const cormorant = Cormorant_Garamond({
+  variable: "--font-cormorant",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
   title: {
-    default: "JA fashions — Clothes, Shoes & Handbags",
+    default: "JA fashions",
     template: "%s · JA fashions",
   },
   description:
-    "JA fashions is a Nigerian online store for clothes, shoes and handbags. Shop and checkout on WhatsApp.",
+    "Clothes, shoes and handbags from JA fashions. Shop online in Nigeria and order on WhatsApp.",
   icons: { icon: "/logo.svg" },
 };
 
@@ -31,12 +33,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${outfit.variable} ${playfair.variable} h-full`}>
-      <body className="min-h-full flex flex-col bg-bg text-paper antialiased">
+    <html lang="en" className={`${dm.variable} ${cormorant.variable} h-full`}>
+      <body className="min-h-full flex flex-col bg-bg text-ink antialiased">
         <CartProvider>
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />
+          <WhatsAppDock />
         </CartProvider>
       </body>
     </html>
