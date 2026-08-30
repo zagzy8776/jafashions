@@ -11,14 +11,14 @@ Online store for **clothes, shoes and handbags**. Nigeria-based. Customers brows
 - Next.js App Router
 - Neon Postgres (`soft-wave-10740409` · org `org-falling-haze-84504714`)
 - Drizzle + `@neondatabase/serverless`
-- Cloudinary uploads from the admin phone camera
+- Cloudinary unsigned uploads from the admin phone camera
 
 ## Local setup
 
 ```bash
 npm install
 cp .env.example .env.local
-# paste DATABASE_URL and Cloudinary keys
+# paste DATABASE_URL
 npm run db:setup
 npm run dev
 ```
@@ -46,13 +46,12 @@ npx neon@latest env pull --file .env.local
 
 ## Cloudinary
 
-Create a cloud, then add:
+Unsigned uploads. Only cloud name + preset are required:
 
-- `CLOUDINARY_CLOUD_NAME`
-- `CLOUDINARY_API_KEY`
-- `CLOUDINARY_API_SECRET`
+- `CLOUDINARY_CLOUD_NAME=bbke1t9y`
+- `CLOUDINARY_UPLOAD_PRESET=Jafashion`
 
-Admin → Add product → camera / gallery. Images land in the `jafashions` folder.
+Admin → Add product → camera / gallery on your phone. No API key needed.
 
 ## Deploy
 

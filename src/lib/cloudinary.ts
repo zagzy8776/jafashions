@@ -1,5 +1,14 @@
 import { v2 as cloudinary } from "cloudinary";
 
+export const CLOUDINARY_CLOUD_NAME =
+  process.env.CLOUDINARY_CLOUD_NAME || "bbke1t9y";
+export const CLOUDINARY_UPLOAD_PRESET =
+  process.env.CLOUDINARY_UPLOAD_PRESET || "Jafashion";
+
+export function unsignedReady() {
+  return Boolean(CLOUDINARY_CLOUD_NAME && CLOUDINARY_UPLOAD_PRESET);
+}
+
 export function cloudinaryReady() {
   return Boolean(
     process.env.CLOUDINARY_CLOUD_NAME &&
