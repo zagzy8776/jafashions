@@ -28,68 +28,57 @@ export default async function Home() {
 
   return (
     <div>
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(198,161,91,0.16),transparent_42%),radial-gradient(circle_at_80%_0%,rgba(255,255,255,0.06),transparent_35%)]" />
-        <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:py-28">
-          <div>
-            <p className="text-xs uppercase tracking-[0.35em] text-gold">Nigeria · Online store</p>
-            <h1 className="serif mt-5 text-5xl leading-[1.05] sm:text-7xl">
-              JA
-              <span className="block italic text-gold-soft">fashions</span>
-            </h1>
-            <p className="mt-6 max-w-md text-base leading-7 text-paper/70">
-              Clothes, shoes and handbags — selected looks you can order from
-              your phone. Tap shop, add to bag, finish on WhatsApp.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/shop" className="rounded-full bg-paper px-6 py-3 text-sm font-medium text-ink hover:bg-gold-soft">
-                Shop the store
-              </Link>
-              <a
-                href={whatsappLink("Hi JA fashions, I want to see available pieces.")}
-                className="rounded-full border border-white/20 px-6 py-3 text-sm hover:border-gold hover:text-gold"
-              >
-                Chat on WhatsApp
-              </a>
-            </div>
-          </div>
-          <div className="relative mx-auto flex h-[420px] w-full max-w-md items-center justify-center border border-white/10 bg-black">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo.svg" alt="JA fashions" className="h-[88%] w-auto" />
+      <section className="relative min-h-[78vh] overflow-hidden bg-[#161513] text-[#faf7f2]">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=2000&q=80"
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover opacity-45"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/20" />
+        <div className="relative mx-auto flex min-h-[78vh] max-w-6xl flex-col justify-end px-4 pb-16 pt-28 sm:px-6">
+          <p className="text-[11px] uppercase tracking-[0.28em] text-[#e8d7b0]">{STORE.location}</p>
+          <h1 className="serif mt-3 max-w-xl text-5xl leading-[0.95] sm:text-7xl">
+            Clothes, shoes<br />and bags.
+          </h1>
+          <p className="mt-5 max-w-md text-sm leading-7 text-white/75">
+            Browse the pieces. Add what you want. Chat us on WhatsApp to close the order.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link href="/shop" className="btn-dark bg-[#faf7f2] !text-[#161513]">Shop now</Link>
+            <a href={whatsappLink()} className="btn-line !border-white !text-white">Chat on WhatsApp</a>
           </div>
         </div>
       </section>
 
-      <section className="border-y border-white/10">
-        <div className="mx-auto grid max-w-7xl sm:grid-cols-3">
+      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+        <h2 className="serif text-4xl">Shop by type</h2>
+        <div className="mt-8 grid gap-4 sm:grid-cols-3">
           {CATEGORIES.map((c) => (
-            <Link
-              key={c.slug}
-              href={`/shop?cat=${c.slug}`}
-              className="border-white/10 px-6 py-10 transition hover:bg-white/5 sm:border-r last:border-r-0"
-            >
-              <p className="text-[11px] uppercase tracking-[0.28em] text-gold">Category</p>
-              <h2 className="serif mt-3 text-3xl">{c.label}</h2>
-              <p className="mt-3 text-sm text-paper/60">{c.blurb}</p>
+            <Link key={c.slug} href={`/shop?cat=${c.slug}`} className="group relative block overflow-hidden">
+              <div className="aspect-[4/5]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={c.image} alt={c.label} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+              <div className="absolute bottom-5 left-5 text-white">
+                <h3 className="serif text-3xl">{c.label}</h3>
+                <p className="mt-1 text-xs text-white/75">{c.blurb}</p>
+              </div>
             </Link>
           ))}
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
+      <section className="mx-auto max-w-6xl px-4 pb-20 sm:px-6">
         <div className="flex items-end justify-between gap-4">
-          <div>
-            <p className="text-[11px] uppercase tracking-[0.28em] text-gold">Featured</p>
-            <h2 className="serif mt-2 text-4xl">New in the bag</h2>
-          </div>
-          <Link href="/shop" className="text-sm text-paper/70 hover:text-gold">View all</Link>
+          <h2 className="serif text-4xl">In store now</h2>
+          <Link href="/shop" className="text-sm underline underline-offset-4">See all</Link>
         </div>
         {items.length === 0 ? (
-          <p className="mt-10 max-w-xl text-sm leading-7 text-paper/60">
-            The catalog is ready. Open the admin on your phone, snap product photos, and they will appear here instantly.
-          </p>
+          <p className="mt-10 text-sm text-[#6f6a63]">New pieces land here first.</p>
         ) : (
-          <div className="mt-10 grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-4">
+          <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-4">
             {items.map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}
@@ -97,20 +86,13 @@ export default async function Home() {
         )}
       </section>
 
-      <section className="bg-bg-soft">
-        <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-4 py-16 sm:px-6 md:flex-row md:items-center">
+      <section className="border-y border-[#ddd4c6] bg-[#faf7f2]">
+        <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 px-4 py-12 sm:px-6 md:flex-row md:items-center">
           <div>
-            <h2 className="serif text-3xl">Need a size or a custom order?</h2>
-            <p className="mt-3 text-sm text-paper/65">
-              Message {STORE.name} on WhatsApp · {STORE.phoneDisplay} · {STORE.location}
-            </p>
+            <h2 className="serif text-3xl">Need a size or something you don&apos;t see?</h2>
+            <p className="mt-2 text-sm text-[#6f6a63]">WhatsApp {STORE.phoneDisplay}</p>
           </div>
-          <a
-            href={whatsappLink("Hi JA fashions, I have a question about an item.")}
-            className="rounded-full bg-gold px-6 py-3 text-sm font-medium text-ink"
-          >
-            Message us
-          </a>
+          <a href={whatsappLink()} className="btn-dark">Open WhatsApp</a>
         </div>
       </section>
     </div>
