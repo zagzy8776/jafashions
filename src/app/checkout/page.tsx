@@ -36,7 +36,7 @@ export default function CheckoutPage() {
       });
       if (!res.ok) throw new Error("Could not place order");
       const lines = items
-        .map((i) => `• ${i.name} x${i.qty}${i.size ? ` (${i.size})` : ""} — ${formatNaira(i.priceNaira * i.qty)}`)
+        .map((i) => `\u2022 ${i.name} x${i.qty}${i.size ? ` (${i.size})` : ""} \u2014 ${formatNaira(i.priceNaira * i.qty)}`)
         .join("\n");
       const msg = `New JA fashions order\n\n${payload.customerName}\n${payload.phone}\n${payload.city} ${payload.state}\n${payload.address}\n\n${lines}\n\nTotal: ${formatNaira(total)}\n${payload.notes}`;
       clear();
@@ -50,8 +50,8 @@ export default function CheckoutPage() {
   if (!items.length) {
     return (
       <div className="mx-auto max-w-xl px-4 py-16">
-        <h1 className="serif text-4xl">Checkout</h1>
-        <p className="mt-4 text-paper/60">Your bag is empty.</p>
+        <h1 className="serif text-5xl">Checkout</h1>
+        <p className="mt-4 text-[#6f6a63]">Your bag is empty.</p>
       </div>
     );
   }
@@ -59,40 +59,52 @@ export default function CheckoutPage() {
   return (
     <div className="mx-auto grid max-w-5xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-2">
       <div>
-        <h1 className="serif text-4xl">Checkout</h1>
-        <p className="mt-3 text-sm text-paper/60">We save the order, then open WhatsApp so you can confirm with {STORE.name}.</p>
+        <h1 className="serif text-5xl">Checkout</h1>
+        <p className="mt-3 text-sm text-[#6f6a63]">We save the order, then open WhatsApp so you can confirm with {STORE.name}.</p>
         <form onSubmit={onSubmit} className="mt-8 space-y-4">
-          <label className="block text-sm"><span className="text-paper/60">Full name</span><input name="customerName" required className="mt-1 w-full rounded-lg border border-white/15 bg-transparent px-3 py-2" /></label>
-          <label className="block text-sm"><span className="text-paper/60">WhatsApp number</span><input name="phone" required className="mt-1 w-full rounded-lg border border-white/15 bg-transparent px-3 py-2" /></label>
-          <label className="block text-sm"><span className="text-paper/60">Email</span><input name="email" type="email" className="mt-1 w-full rounded-lg border border-white/15 bg-transparent px-3 py-2" /></label>
-          <label className="block text-sm"><span className="text-paper/60">Delivery address</span><input name="address" className="mt-1 w-full rounded-lg border border-white/15 bg-transparent px-3 py-2" /></label>
+          <Field name="customerName" label="Full name" required />
+          <Field name="phone" label="WhatsApp number" required />
+          <Field name="email" label="Email" type="email" />
+          <Field name="address" label="Delivery address" />
           <div className="grid grid-cols-2 gap-3">
-            <label className="block text-sm"><span className="text-paper/60">City</span><input name="city" className="mt-1 w-full rounded-lg border border-white/15 bg-transparent px-3 py-2" /></label>
-            <label className="block text-sm"><span className="text-paper/60">State</span><input name="state" className="mt-1 w-full rounded-lg border border-white/15 bg-transparent px-3 py-2" /></label>
+            <Field name="city" label="City" />
+            <Field name="state" label="State" />
           </div>
-          <label className="block text-sm"><span className="text-paper/60">Notes</span><textarea name="notes" rows={3} className="mt-1 w-full rounded-lg border border-white/15 bg-transparent px-3 py-2" /></label>
-          {error && <p className="text-sm text-red-300">{error}</p>}
-          <button disabled={busy} className="w-full rounded-full bg-paper py-3 text-sm font-medium text-ink disabled:opacity-50">
-            {busy ? "Sending…" : `Place order · ${formatNaira(total)}`}
+          <label className="block text-sm">
+            <span className="text-[#6f6a63]">Notes</span>
+            <textarea name="notes" rows={3} className="mt-1 w-full border border-[#161513] bg-transparent px-3 py-2" />
+          </label>
+          {error && <p className="text-sm text-red-700">{error}</p>}
+          <button disabled={busy} className="btn-dark w-full disabled:opacity-50">
+            {busy ? "Sending\u2026" : `Place order \u00b7 ${formatNaira(total)}`}
           </button>
         </form>
       </div>
-      <aside className="border border-white/10 bg-bg-soft p-6 h-fit">
-        <h2 className="text-xs uppercase tracking-[0.22em] text-gold">Order</h2>
+      <aside className="h-fit border border-[#161513] bg-[#faf7f2] p-6">
+        <h2 className="text-[11px] uppercase tracking-[0.16em] text-[#8a6a32]">Order</h2>
         <ul className="mt-4 space-y-3 text-sm">
           {items.map((i) => (
             <li key={`${i.productId}-${i.size}-${i.color}`} className="flex justify-between gap-3">
-              <span>{i.name} × {i.qty}</span>
+              <span>{i.name} \u00d7 {i.qty}</span>
               <span>{formatNaira(i.priceNaira * i.qty)}</span>
             </li>
           ))}
         </ul>
-        <div className="mt-5 flex justify-between border-t border-white/10 pt-4">
+        <div className="mt-5 flex justify-between border-t border-[#ddd4c6] pt-4">
           <span>Total</span>
           <span>{formatNaira(total)}</span>
         </div>
-        <button type="button" className="mt-4 text-xs text-paper/50" onClick={() => router.push("/cart")}>Edit bag</button>
+        <button type="button" className="mt-4 text-xs underline" onClick={() => router.push("/cart")}>Edit bag</button>
       </aside>
     </div>
+  );
+}
+
+function Field({ name, label, type = "text", required }: { name: string; label: string; type?: string; required?: boolean }) {
+  return (
+    <label className="block text-sm">
+      <span className="text-[#6f6a63]">{label}</span>
+      <input name={name} type={type} required={required} className="mt-1 w-full border border-[#161513] bg-transparent px-3 py-2" />
+    </label>
   );
 }
