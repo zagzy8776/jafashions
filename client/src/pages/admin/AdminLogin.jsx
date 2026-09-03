@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, Mail, ShieldCheck } from 'lucide-react';
-import { api, logoUrl } from '../../lib/api.js';
+import { logoUrl } from '../../lib/api.js';
+import { login } from '../../lib/clientAuth.js';
 
 export default function AdminLogin() {
   const navigate = useNavigate();
@@ -9,20 +10,23 @@ export default function AdminLogin() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  
   const submit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
+    
     try {
-      const res = await api.post('/auth/login', { email, password });
-      localStorage.setItem('jf_admin_token', res.data.token);
+      // Client-side authentication (temporary solution)
+      login(password);
       navigate('/admin');
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed');
+      setError(err.message || 'Login failed');
     } finally {
       setLoading(false);
     }
   };
+  
   return (
     <main className="luxury-gradient grid min-h-screen place-items-center px-4 py-10">
       <form onSubmit={submit} className="w-full max-w-md rounded-[2.5rem] border border-amber-200/30 bg-[#fffaf1] p-8 shadow-2xl">
