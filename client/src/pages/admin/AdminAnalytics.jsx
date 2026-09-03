@@ -1,3 +1,10 @@
+import { useEffect, useMemo, useState } from 'react';
+import { api } from '../../lib/api.js';
+
 export default function AdminAnalytics() {
-  return <main className="p-6 lg:p-10"><h1 className="font-display text-4xl font-semibold">Analytics</h1><p className="mt-3 text-stone-600">Traffic and order stats will show here once the store is live.</p></main>;
+  const [data, setData] = useState(null);
+  const [error, setError] = useState('');
+  useEffect(() => { api.get('/analytics/summary').then((res) => setData(res.data)).catch((err) => setError(err.response?.data?.message || 'Analytics endpoint is not available')); }, []);
+  const topSources = useMemo(() => data?.sources || [], [data]);
+  return <main className="p-6 lg:p-10"><p className="text-sm uppercase tracking-[0.3em] text-amber-700">Store intelligence</p><h1 className="font-display text-4xl font-semibold">Analytics</h1><p className="mt-2 text-stone-600">Understand visitors, traffic sources and product interest.</p>{error ? <div className="mt-8 rounded-[2rem] bg-white p-8 shadow-sm"><p className="font-semibold">Analytics data is not available yet.</p><p className="mt-2 text-sm text-stone-500">The page is connected and will populate once the analytics summary route is deployed.</p></div> : <><div className="mt-8 grid gap-4 md:grid-cols-3"><div className="rounded-[2rem] bg-white p-6 shadow-sm"><p className="text-sm text-stone-500">Page views</p><p className="mt-2 font-display text-4xl">{data?.pageViews ?? 0}</p></div><div className="rounded-[2rem] bg-white p-6 shadow-sm"><p className="text-sm text-stone-500">Sessions</p><p className="mt-2 font-display text-4xl">{data?.sessions ?? 0}</p></div><div className="rounded-[2rem] bg-stone-950 p-6 text-white shadow-sm"><p className="text-sm text-stone-400">Product views</p><p className="mt-2 font-display text-4xl">{data?.productViews ?? 0}</p></div></div><section className="mt-6 rounded-[2rem] bg-white p-6 shadow-sm"><h2 className="text-xl font-semibold">Traffic sources</h2><div className="mt-4 grid gap-3">{topSources.map((source)=><div key={source.source} className="flex items-center justify-between rounded-2xl bg-stone-50 p-4"><span>{source.source}</span><strong>{source.count}</strong></div>)}{!topSources.length && <p className="text-sm text-stone-500">No traffic data yet.</p>}</div></section></>}</main>;
 }
