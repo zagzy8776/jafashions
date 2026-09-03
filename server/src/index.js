@@ -14,6 +14,7 @@ app.use(express.urlencoded({ extended: true, limit: '2mb' }));
 
 app.use('/auth', require('./routes/auth'));
 app.use('/admin', require('./routes/admin').router);
+app.use('/analytics', require('./routes/admin-analytics'));
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
