@@ -1,7 +1,7 @@
 {
-  "buildCommand": "cd client && npm install --include=dev && npm run build",
+  "buildCommand": "cd client && npm run build",
   "outputDirectory": "client/dist",
-  "installCommand": "npm install --prefix api && cd client && npm install --include=dev",
+  "installCommand": "cd server && npm install --include=dev && npx prisma generate && cd ../client && npm install --include=dev",
   "framework": null,
   "rewrites": [
     {
