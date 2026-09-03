@@ -1,21 +1,6 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "client/dist",
-  "installCommand": "npm install",
-  "env": {
-    "NODE_ENV": "production"
-  },
-  "functions": {
-    "api/**/*.js": {
-      "runtime": "nodejs@18.x",
-      "memory": 1024,
-      "maxDuration": 30
-    }
-  },
-  "routes": [
-    { "src": "/api/auth/login", "dest": "/api/auth/login.js", "methods": ["POST", "OPTIONS"] },
-    { "src": "/api/(.*)", "dest": "/api/$1.js" },
-    { "src": "/(.*)", "dest": "/index.html", "status": 200 }
-  ]
+  "installCommand": "npm install"
 }
 
