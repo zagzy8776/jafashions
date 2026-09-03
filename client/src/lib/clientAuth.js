@@ -1,7 +1,7 @@
 import { api } from './api.js';
 
-export async function login(email, password) {
-  const response = await api.post('/auth/login', { email, password });
+export async function login(password) {
+  const response = await api.post('/auth/login', { password });
   if (!response.data?.token) throw new Error('Login succeeded but no session token was returned');
   localStorage.setItem('jf_admin_token', response.data.token);
   return response.data;
