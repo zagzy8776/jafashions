@@ -4,7 +4,7 @@
   "outputDirectory": "client/dist",
   "installCommand": "npm install",
   "functions": {
-    "pages/api/**/*.js": {
+    "api/**/*.js": {
       "memory": 1024,
       "maxDuration": 10
     }
