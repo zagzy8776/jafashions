@@ -24,10 +24,13 @@ function checkPassword(input) {
 }
 
 module.exports = async (req, res) => {
+  console.log('Auth login called:', req.method, req.url);
+  
   // CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Content-Type', 'application/json');
 
   // Handle OPTIONS preflight
   if (req.method === 'OPTIONS') {
@@ -36,25 +39,26 @@ module.exports = async (req, res) => {
 
   // Only allow POST requests
   if (req.method !== 'POST') {
-    res.status(405);
-    return res.json({ message: 'Method not allowed' });
+    return res.status(405).json({ message: 'Method not allowed' });
   }
 
   try {
     const { password } = req.body || {};
+    console.log('Password provided:', !!password);
 
     if (!password) {
-      res.status(400);
-      return res.json({ message: 'Password is required' });
+      return res.status(400).json({ message: 'Password is required' });
     }
 
     if (!checkPassword(String(password).trim())) {
-      res.status(401);
-      return res.json({ message: 'Invalid password' });
+      console.log('Password check failed');
+      return res.status(401).json({ message: 'Invalid password' });
     }
 
     const token = signAdminToken();
     const oneWeek = 60 * 60 * 24 * 7;
+
+    console.log('Login successful, setting cookie');
 
     // Set cookie header
     res.setHeader(
@@ -64,12 +68,12 @@ module.exports = async (req, res) => {
       }`
     );
 
-    res.status(200);
-    return res.json({ ok: true, token });
+    return res.status(200).json({ ok: true, token });
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500);
-    return res.json({ message: 'Internal server error', error: error.message });
+    return res.status(500).json({ 
+      message: 'Internal server error',
+      error: process.env.NODE_ENV === 'production' ? undefined : error.message
+    });
   }
 };
-
