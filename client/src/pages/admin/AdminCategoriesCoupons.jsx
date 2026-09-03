@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react';
-import { api } from '../../lib/api.js';
+import { Plus, Trash2 } from 'lucide-react';
+import { api, formatNaira } from '../../lib/api.js';
 
 export default function AdminCategoriesCoupons() {
   const [categories, setCategories] = useState([]);
-  useEffect(() => { api.get('/categories').then((res) => setCategories(res.data.categories || [])).catch(() => setCategories([])); }, []);
-  return (
-    <main className="p-6 lg:p-10">
-      <h1 className="font-display text-4xl font-semibold">Categories & Coupons</h1>
-      <div className="mt-8 grid gap-3">
-        {categories.map((cat) => <article key={cat.id} className="rounded-2xl bg-white p-4 shadow-sm">{cat.name}</article>)}
-      </div>
-    </main>
-  );
+  const [coupons, setCoupons] = useState([]);
+  const [categoryName, setCategoryName] = useState('');
+  const [categoryDescription, setCategoryDescription] = useState('');
+  const [coupon, setCoupon] = useState({ code: '', type: 'PERCENTAGE', value: '', expiresAt: '' });
+  const [error, setError] = useState('');
+  const load = async () => { const [a,b] = await Promise.all([api.get('/admin/categories'), api.get('/admin/coupons')]); setCategories(a.data.categories || []); setCoupons(b.data.coupons || []); };
+  useEffect(() => { load().catch((err) => setError(err.response?.data?.message || 'Could not load settings')); }, []);
+  const addCategory = async (e) => { e.preventDefault(); if (!categoryName.trim()) return; try { await api.post('/admin/categories', { name: categoryName, description: categoryDescription }); setCategoryName(''); setCategoryDescription(''); await load(); } catch (err) { setError(err.response?.data?.message || 'Could not create category'); } };
+  const addCoupon = async (e) => { e.preventDefault(); try { await api.post('/admin/coupons', { ...coupon, value: Number(coupon.value), expiresAt: coupon.expiresAt || null }); setCoupon({ code:'',type:'PERCENTAGE',value:'',expiresAt:'' }); await load(); } catch (err) { setError(err.response?.data?.message || 'Could not create coupon'); } };
+  const remove = async (kind,id) => { if (!window.confirm('Delete this item?')) return; try { await api.delete(`/admin/${kind}/${id}`); await load(); } catch (err) { setError(err.response?.data?.message || 'Could not delete'); } };
+  return <main className="p-6 lg:p-10"><p className="text-sm uppercase tracking-[0.3em] text-amber-700">Store settings</p><h1 className="font-display text-4xl font-semibold">Categories & Coupons</h1><p className="mt-2 text-stone-600">Keep your catalogue organised and create discount codes without editing the website.</p>{error && <div className="mt-5 rounded-2xl bg-red-50 p-4 text-sm text-red-700">{error}</div>}<div className="mt-8 grid gap-6 lg:grid-cols-2"><section className="rounded-[2rem] bg-white p-6 shadow-sm"><h2 className="text-xl font-semibold">Categories</h2><form onSubmit={addCategory} className="mt-4 grid gap-3"><input required value={categoryName} onChange={(e)=>setCategoryName(e.target.value)} placeholder="Category name" className="rounded-2xl bg-stone-100 px-4 py-3 outline-none"/><input value={categoryDescription} onChange={(e)=>setCategoryDescription(e.target.value)} placeholder="Description" className="rounded-2xl bg-stone-100 px-4 py-3 outline-none"/><button className="inline-flex w-fit items-center gap-2 rounded-full bg-stone-950 px-5 py-3 font-semibold text-white"><Plus size={17}/> Add category</button></form><div className="mt-6 grid gap-2">{categories.map((cat)=><div key={cat.id} className="flex items-center justify-between rounded-2xl bg-stone-50 p-4"><div><p className="font-semibold">{cat.name}</p><p className="text-xs text-stone-500">{cat._count?.products ?? 0} products</p></div><button onClick={()=>remove('categories',cat.id)} className="rounded-full bg-red-50 p-2 text-red-600"><Trash2 size={16}/></button></div>)}</div></section><section className="rounded-[2rem] bg-white p-6 shadow-sm"><h2 className="text-xl font-semibold">Coupons</h2><form onSubmit={addCoupon} className="mt-4 grid gap-3"><input required value={coupon.code} onChange={(e)=>setCoupon({...coupon,code:e.target.value})} placeholder="Coupon code" className="rounded-2xl bg-stone-100 px-4 py-3 uppercase outline-none"/><div className="grid grid-cols-2 gap-3"><select value={coupon.type} onChange={(e)=>setCoupon({...coupon,type:e.target.value})} className="rounded-2xl bg-stone-100 px-4 py-3 outline-none"><option value="PERCENTAGE">Percentage</option><option value="FIXED">Fixed amount</option></select><input required type="number" min="0" value={coupon.value} onChange={(e)=>setCoupon({...coupon,value:e.target.value})} placeholder="Value" className="rounded-2xl bg-stone-100 px-4 py-3 outline-none"/></div><input type="date" value={coupon.expiresAt} onChange={(e)=>setCoupon({...coupon,expiresAt:e.target.value})} className="rounded-2xl bg-stone-100 px-4 py-3 outline-none"/><button className="inline-flex w-fit items-center gap-2 rounded-full bg-amber-500 px-5 py-3 font-semibold text-stone-950"><Plus size={17}/> Add coupon</button></form><div className="mt-6 grid gap-2">{coupons.map((item)=><div key={item.id} className="flex items-center justify-between rounded-2xl bg-stone-50 p-4"><div><p className="font-semibold">{item.code}</p><p className="text-xs text-stone-500">{item.type === 'PERCENTAGE' ? `${item.value}% off` : `${formatNaira(item.value)} off`}{item.expiresAt ? ` · expires ${new Date(item.expiresAt).toLocaleDateString('en-NG')}` : ''}</p></div><button onClick={()=>remove('coupons',item.id)} className="rounded-full bg-red-50 p-2 text-red-600"><Trash2 size={16}/></button></div>)}</div></section></div></main>;
 }
