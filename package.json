@@ -4,8 +4,5 @@
   "private": true,
   "scripts": {
     "build": "cd client && npm install --include=dev && npm run build"
-  },
-  "dependencies": {
-    "next": "^15.1.6"
   }
 }
