@@ -17,7 +17,6 @@ const adminRouter = require('./routes/admin').router;
 const analyticsRouter = require('./routes/admin-analytics');
 const storeRouter = require('./routes/store');
 
-// Keep the existing direct routes and expose the same /api contract used by the Vercel frontend.
 app.use('/auth', authRouter);
 app.use('/admin', adminRouter);
 app.use('/analytics', analyticsRouter);
@@ -50,7 +49,7 @@ app.use((req, res) => {
 
 const PORT = process.env.PORT || 5000;
 if (require.main === module) {
-  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  app.listen(PORT, '0.0.0.0', () => console.log(`Server running on 0.0.0.0:${PORT}`));
 }
 
 module.exports = app;
