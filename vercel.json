@@ -2,6 +2,12 @@
   "buildCommand": "cd client && npm install --include=dev && npm run build",
   "outputDirectory": "client/dist",
   "installCommand": "echo 'Skipping root install'",
-  "framework": null
+  "framework": null,
+  "rewrites": [
+    {
+      "source": "/((?!api/)[^.]*)",
+      "destination": "/index.html"
+    }
+  ]
 }
 
