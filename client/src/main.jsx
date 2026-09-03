@@ -35,7 +35,6 @@ import AdminSales from './pages/admin/AdminSales.jsx';
 import AdminCustomers from './pages/admin/AdminCustomers.jsx';
 import AdminPromos from './pages/admin/AdminPromos.jsx';
 import AdminStockAlerts from './pages/admin/AdminStockAlerts.jsx';
-import AdminWhatsAppTemplates from './pages/admin/AdminWhatsAppTemplates.jsx';
 import './styles.css';
 
 const Protected = ({ children }) => {
@@ -89,7 +88,6 @@ createRoot(document.getElementById('root')).render(
               <Route path="customers" element={<AdminCustomers />} />
               <Route path="promos" element={<AdminPromos />} />
               <Route path="stock-alerts" element={<AdminStockAlerts />} />
-              <Route path="whatsapp" element={<AdminWhatsAppTemplates />} />
               <Route path="testimonials" element={<AdminTestimonials />} />
               <Route path="settings" element={<AdminCategoriesCoupons />} />
             </Route>
