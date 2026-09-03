@@ -1,8 +1,13 @@
 {
   "buildCommand": "cd client && npm install --include=dev && npm run build",
   "outputDirectory": "client/dist",
-  "installCommand": "echo 'Skipping root install'",
+  "installCommand": "npm install --prefix api && cd client && npm install --include=dev",
   "framework": null,
+  "functions": {
+    "api/**/*.js": {
+      "runtime": "nodejs20.x"
+    }
+  },
   "rewrites": [
     {
       "source": "/((?!api/)[^.]*)",
@@ -10,4 +15,3 @@
     }
   ]
 }
-
