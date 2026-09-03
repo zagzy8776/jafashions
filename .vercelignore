@@ -2,9 +2,10 @@ node_modules
 .git
 .env.example
 /server
-/src
 /scripts
 .mcp.json
 .neon
 neon.ts
 tsconfig.json
+/api
+/pages
