@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const rawApiUrl = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '/api' : 'http://localhost:5000/api');
+const rawApiUrl = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? 'https://jafashions.onrender.com/api' : 'http://localhost:5000/api');
 
 const normalizeApiUrl = (url) => {
   const cleanUrl = String(url).replace(/\/+$/, '');
@@ -9,7 +9,7 @@ const normalizeApiUrl = (url) => {
 
 export const API_URL = normalizeApiUrl(rawApiUrl);
 
-export const api = axios.create({ baseURL: API_URL });
+export const api = axios.create({ baseURL: API_URL, timeout: 30000 });
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('jf_admin_token');
