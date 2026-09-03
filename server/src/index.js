@@ -12,12 +12,27 @@ app.use(cors());
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true, limit: '2mb' }));
 
-app.use('/auth', require('./routes/auth'));
-app.use('/admin', require('./routes/admin').router);
-app.use('/analytics', require('./routes/admin-analytics'));
-app.use('/', require('./routes/store'));
+const authRouter = require('./routes/auth');
+const adminRouter = require('./routes/admin').router;
+const analyticsRouter = require('./routes/admin-analytics');
+const storeRouter = require('./routes/store');
+
+// Keep the existing direct routes and expose the same /api contract used by the Vercel frontend.
+app.use('/auth', authRouter);
+app.use('/admin', adminRouter);
+app.use('/analytics', analyticsRouter);
+app.use('/', storeRouter);
+
+app.use('/api/auth', authRouter);
+app.use('/api/admin', adminRouter);
+app.use('/api/analytics', analyticsRouter);
+app.use('/api', storeRouter);
 
 app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
