@@ -5,6 +5,7 @@ import { CartProvider } from './context/CartContext.jsx';
 import { WishlistProvider } from './context/WishlistContext.jsx';
 import AppLayout from './components/AppLayout.jsx';
 import AdminLayout from './components/AdminLayout.jsx';
+import AdminErrorBoundary from './components/AdminErrorBoundary.jsx';
 import Home from './pages/Home.jsx';
 import Shop from './pages/Shop.jsx';
 import ProductDetails from './pages/ProductDetails.jsx';
@@ -42,51 +43,59 @@ const Protected = ({ children }) => {
   return token ? children : <Navigate to="/admin/login" replace />;
 };
 
+const AdminApp = () => (
+  <Protected>
+    <AdminErrorBoundary>
+      <AdminLayout />
+    </AdminErrorBoundary>
+  </Protected>
+);
+
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
       <WishlistProvider>
         <CartProvider>
-        <Routes>
-          <Route element={<AppLayout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/shop" element={<Shop />} />
-            <Route path="/product/:slug" element={<ProductDetails />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/wishlist" element={<Wishlist />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/order-success" element={<OrderSuccess />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/gallery" element={<Gallery />} />
-            <Route path="/gifts" element={<Gifts />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/wholesale" element={<Navigate to="/" replace />} />
-            <Route path="/style-finder" element={<StyleFinder />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogPost />} />
-            <Route path="/delivery" element={<DeliveryInfo />} />
-            <Route path="/contact" element={<Contact />} />
-          </Route>
+          <Routes>
+            <Route element={<AppLayout />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/shop" element={<Shop />} />
+              <Route path="/product/:slug" element={<ProductDetails />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/wishlist" element={<Wishlist />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/order-success" element={<OrderSuccess />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/gallery" element={<Gallery />} />
+              <Route path="/gifts" element={<Gifts />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/wholesale" element={<Navigate to="/" replace />} />
+              <Route path="/style-finder" element={<StyleFinder />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
+              <Route path="/delivery" element={<DeliveryInfo />} />
+              <Route path="/contact" element={<Contact />} />
+            </Route>
 
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin" element={<Protected><AdminLayout /></Protected>}>
-            <Route index element={<Dashboard />} />
-            <Route path="products" element={<AdminProducts />} />
-            <Route path="orders" element={<AdminOrders />} />
-            <Route path="orders/:id" element={<AdminOrderDetails />} />
-            <Route path="gallery" element={<AdminGallery />} />
-            <Route path="analytics" element={<AdminAnalytics />} />
-            <Route path="sales" element={<AdminSales />} />
-            <Route path="customers" element={<AdminCustomers />} />
-            <Route path="promos" element={<AdminPromos />} />
-            <Route path="stock-alerts" element={<AdminStockAlerts />} />
-            <Route path="whatsapp" element={<AdminWhatsAppTemplates />} />
-            <Route path="testimonials" element={<AdminTestimonials />} />
-            <Route path="settings" element={<AdminCategoriesCoupons />} />
-          </Route>
-        </Routes>
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={<AdminApp />}>
+              <Route index element={<Dashboard />} />
+              <Route path="products" element={<AdminProducts />} />
+              <Route path="orders" element={<AdminOrders />} />
+              <Route path="orders/:id" element={<AdminOrderDetails />} />
+              <Route path="gallery" element={<AdminGallery />} />
+              <Route path="analytics" element={<AdminAnalytics />} />
+              <Route path="sales" element={<AdminSales />} />
+              <Route path="customers" element={<AdminCustomers />} />
+              <Route path="promos" element={<AdminPromos />} />
+              <Route path="stock-alerts" element={<AdminStockAlerts />} />
+              <Route path="whatsapp" element={<AdminWhatsAppTemplates />} />
+              <Route path="testimonials" element={<AdminTestimonials />} />
+              <Route path="settings" element={<AdminCategoriesCoupons />} />
+            </Route>
+          </Routes>
         </CartProvider>
       </WishlistProvider>
     </BrowserRouter>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
